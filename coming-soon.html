@@ -47,5 +47,78 @@
       <a href="coming-soon.html">Terms</a> · <a href="coming-soon.html">Privacy</a>
     </small>
   </footer>
+
+<a id="waQuick" class="btn" target="_blank" rel="noopener noreferrer"
+   aria-label="Chat on WhatsApp with prefilled details">
+  Chat on WhatsApp
+</a>
+
+<script>
+  // Whatsapp Quick Message Link with Prefilled Details
+  document.addEventListener('DOMContentLoaded', () => {
+    const WA_NUMBER = '923494486605'; // your real WhatsApp number (digits only)
+
+    const waBtn = document.getElementById('waQuick');
+    if (!waBtn) return;
+
+    const form = document.getElementById('requestForm');
+
+    const val = (el, ph) => {
+      if (!el) return ph;
+      const v = (typeof el === 'string') ? el : (el.value || '');
+      return v.trim() || ph;
+    };
+
+    function buildMessage() {
+      const name     = form?.name;
+      const level    = form?.level;
+      const subjects = form?.subjects;
+      const location = form?.location;
+      const times    = form?.times;
+      const mobile   = form?.mobile;
+      const email    = form?.email;
+      const age      = form?.age;
+      const school   = form?.school;
+
+      return [
+        `*🏫 Home Tuition Inquiry — Thokar Niaz Baig*`,
+        ``,
+        `*My name:* ${val(name, 'Type your name')}`,
+        `*Student level / class:* ${val(level, 'e.g., Grade 8 / O-Levels')}`,
+        `*Subjects:* ${val(subjects, 'e.g., Math, Science')}`,
+        `*Location:* ${val(location, 'Area/Street name')}`,
+        `*Age:* ${val(age, 'Age (optional)')}`,
+        `*School:* ${val(school, 'School name (optional)')}`,
+      ].join("\n");
+    }
+
+
+    function makeUrl() {
+      const msg = encodeURIComponent(buildMessage());
+      return `https://wa.me/${WA_NUMBER}?text=${msg}`;
+    }
+
+    if (form) waBtn.href = makeUrl();
+
+    waBtn.addEventListener('click', (e) => {
+      const url = makeUrl();
+      waBtn.href = url;
+      window.open(url, '_blank', 'noopener');
+      e.preventDefault();
+    });
+
+    if (form) {
+      ['name','level','subjects','location','times','mobile','email','age','school']
+        .forEach(id => form[id]?.addEventListener('input', () => {
+          waBtn.href = makeUrl();
+        }));
+    }
+  });
+  // Whatsapp Quick Message Link with Prefilled Details - END
+</script>
+
+
+
+
 </body>
 </html>

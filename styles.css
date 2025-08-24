@@ -15,6 +15,7 @@ input,button,select,textarea{font:inherit}
 :root{
   --primary:#22c55e;
   --primary-600:#16a34a;
+  --primary-800:#175f31;
   --ink:#0f172a;
   --muted:#475569;
   --surface:#ffffff;
@@ -44,16 +45,150 @@ input,button,select,textarea{font:inherit}
 .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700}
 .badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#06b6d4);display:grid;place-items:center;color:#fff;font-weight:800}
-.tabs{display:flex;gap:10px}
+/* .tabs{display:flex;gap:10px}
 .tab{padding:8px 12px;border:1px solid var(--border);border-radius:12px;background:#fff}
-.tab[aria-current="page"],.tab.active,.tab:focus{background:var(--primary);border-color:var(--primary);color:#fff}
+.tab[aria-current="page"],.tab.active,.tab:focus{background:var(--primary);border-color:var(--primary);color:#fff} */
+/* --- Buttons --- */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:42px;
+  padding:10px 16px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#fff;
+  color:var(--ink);
+  font-weight:600;
+  line-height:1;
+  cursor:pointer;
+  text-decoration:none;
+  box-shadow:0 1px 2px rgba(2,6,23,.06);
+  transition:transform .12s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+}
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 10px rgba(2,6,23,.08);
+}
+.btn:active{
+  transform:translateY(0);
+}
+.btn:focus-visible{
+  outline:none;
+  box-shadow:var(--ring);
+}
+.btn[disabled], .btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  transform:none;
+}
+
+/* Primary variant */
+.btn-primary{
+  background:linear-gradient(180deg,var(--primary),var(--primary-600));
+  border-color:var(--primary);
+  color:#fff;
+  box-shadow:0 6px 14px rgba(34,197,94,.22), inset 0 1px 0 rgba(255,255,255,.2);
+}
+.btn-primary:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 18px rgba(34,197,94,.25);
+}
+.btn-primary:active{
+  transform:translateY(0);
+}
+
+/* Actions group */
+.actions{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:24px;
+}
+.actions .right{display:flex;gap:10px}
+
+/* --- Tabs --- */
+.tabs{
+  display:flex;
+  gap:10px;
+}
+.tab{
+  padding:10px 14px;
+  border:1px solid #bbf7d0;   /* softer border */
+  border-radius:8px;
+  background:#f0fdf4;
+  color:#065f46;
+  font-weight:600;
+  line-height:1;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6), 0 1px 2px rgba(2,6,23,.06);
+  transition:transform .12s ease, background .15s ease, box-shadow .15s ease;
+}
+.tab:hover{
+  background:#dcfce7;
+  transform:translateY(-1px);
+}
+.tab:focus-visible{
+  outline:none;
+  box-shadow:var(--ring);
+}
+.tab[aria-current="page"], .tab.active, .tab:focus{
+  background:linear-gradient(180deg,var(--primary),var(--primary-600));
+  border-color:var(--primary);
+  color:#fff;
+  box-shadow:0 6px 14px rgba(34,197,94,.22);
+}
+
+
+
+
 
 .hero{background:linear-gradient(180deg,#ecfdf5,transparent)}
 .hero .container{display:flex;flex-wrap:wrap;align-items:center;gap:18px}
 .hero h1{font-size:clamp(1.7rem,3vw,2.3rem);margin:8px 0}
 .hero p{color:var(--muted);max-width:65ch;margin:0;margin-bottom: 0.5rem;}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--border)}
+/* =========================
+   Chips – default = soft/brand
+   ========================= */
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:9px 14px;
+  border-radius:999px;
+
+  /* --- Default soft theme --- */
+  background:#f0fdf4;      /* light green surface */
+  border:1px solid #bbf7d0;/* soft green border */
+  color:#065f46;           /* deep teal text */
+  font-weight:500;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.6),
+    0 1px 2px rgba(2,6,23,.06);
+
+  line-height:1;
+  cursor:pointer;
+  transition:transform .12s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.chip:hover{
+  background:#dcfce7;       /* darker soft green */
+  transform:translateY(-1px);
+  box-shadow:0 2px 8px rgba(2,6,23,.08);
+}
+
+.chip:focus-visible{
+  outline:none;
+  box-shadow:var(--ring);
+}
+
 
 /* --- Grid / Cards --- */
 .grid{display:grid;grid-template-columns:1fr 360px;gap:24px;margin-top:20px}
@@ -117,16 +252,20 @@ select{
 .steps .step.error span{ background:#FCA5A5 !important; }   /* step pill turns red */
 
 /* --- Buttons --- */
-.btn{
+/* .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   min-height:40px;padding:10px 14px;border-radius:12px;border:1px solid var(--border);
   background:#fff;cursor:pointer;transition:transform .12s ease
 }
 .btn:hover{transform:translateY(-1px)}
 .btn-primary{background:var(--primary);border-color:var(--primary);color:#fff}
-.btn-primary:hover{filter:brightness(.98)}
+.btn-primary:hover{filter:brightness(.98)} */
 .actions{display:flex;justify-content:space-between;gap:10px;margin-top:24px}
 .actions .right{display:flex;gap:10px}
+
+
+
+
 
 /* --- Aside --- */
 .aside{position:sticky;top:84px;align-self:start}
@@ -193,16 +332,10 @@ fieldset.legendless{border:0;padding:0}
 /* ===== About section (personal brand) ===== */
 .about-body{display:grid;grid-template-columns:220px 1fr;gap:18px}
 .card.about .body { padding: 22px 22px 18px; }
+.card.about .mini-card strong { color: var(--primary-600)}
+.card.about .mini-card p { color: var(--muted); }
 @media (max-width:860px){.about-body{grid-template-columns:1fr}}
 
-.avatar{
-  width:96px;height:96px;border-radius:50%;
-  display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--primary),#06b6d4);
-  color:#fff;font-weight:800;font-size:28px;letter-spacing:.5px;
-  box-shadow:var(--shadow);
-  margin-bottom:10px;
-}
 
 .badge-list{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:8px}
 .badge-soft{
@@ -270,6 +403,7 @@ fieldset.legendless{border:0;padding:0}
   background:linear-gradient(135deg,var(--primary),#06b6d4);
   color:#fff;font-weight:800;font-size:28px;letter-spacing:.5px;
   box-shadow:var(--shadow);
+  margin-bottom: 18px;
 }
 
 /* CTA alignment */
@@ -338,5 +472,172 @@ fieldset.legendless{border:0;padding:0}
   .grid{grid-template-columns:1fr;gap:18px}
   .card header{padding:14px 16px}
   .card .body{padding:16px}
-  .chip{padding:7px 10px}
+  .chip{padding:10px 14px}
+}
+
+
+/* WhatsApp CTA – theme-matched */
+.btn-wa{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:12px;
+  border:1px solid #86EFAC;            /* soft green border */
+  background:#F0FDF4;                   /* surface-2 */
+  color:#065F46;                        /* deep teal text */
+  font-weight:600;
+  box-shadow:0 2px 8px rgba(2,6,23,.06);
+  transition:transform .12s ease, background .15s ease, box-shadow .15s ease;
+}
+.btn-wa:hover{ background:#DCFCE7; transform:translateY(-1px); }
+.btn-wa:focus-visible{ outline:none; box-shadow:var(--ring); }
+.btn-wa .wa-ic{ width:18px; height:18px; fill:#16a34a; }
+
+/* On small screens, make it full width for easier tap */
+@media (max-width:640px){
+  .stat .btn-wa{ width:100%; justify-content:center; }
+}
+
+
+
+
+/* --- Aside Stat UX Improvements --- */
+.stat{
+  padding:18px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--surface);
+  /* box-shadow:var(--shadow); */
+}
+
+.stat .hint{
+  font-size:.85rem;
+  font-weight:600;
+  color:var(--muted);
+  letter-spacing:.3px;
+  margin-top: 0;
+  margin-bottom:4px;
+  display:block;
+}
+
+.stat strong{
+  font-size:1.6rem;
+  font-weight:700;
+  color:var(--primary-600);
+  display:block;
+  margin-bottom:10px;
+}
+
+.stat p{
+  font-size:.95rem;
+  line-height:1.5;
+  color:var(--ink);
+  margin-top:6px;
+}
+
+.why-choose {
+  color: var(--ink);
+}
+.why-choose strong {
+  color: #3baa63;
+}
+
+
+/* Why-choose: readable, modern bullets */
+.why-choose .wc-list{
+  list-style:none;
+  padding-left:4px;
+  margin:0;
+  display:grid;
+  gap:10px;                   /* vertical rhythm */
+      margin-block: 5px 22px;
+}
+.why-choose .wc-list li{
+  position:relative;
+  padding-left:18px;          /* space for the tick */
+  line-height:1.55;
+}
+.why-choose .wc-list li::before{
+  content:"";
+  position:absolute; left:0; top:0.7em;
+  width:10px; height:10px; border-radius:50%;
+  background:var(--primary);
+  box-shadow:0 0 0 4px rgba(34,197,94,.15); /* soft halo */
+  transform:translateY(-50%);
+}
+
+/* Two-column on larger screens for quicker scanning */
+@media (min-width:900px){
+  .why-choose .wc-list li{
+    padding-left:24px;          /* space for the tick */
+  }
+}
+
+/* Subtle header/body spacing tweak inside the card */
+.why-choose header{ padding-bottom:12px; }
+.why-choose .body{ padding-top:10px; }
+
+
+
+/* ---------- Mobile refinements (Why-choose + Stat) ---------- */
+@media (max-width: 560px){
+
+  /* Card padding a touch tighter on phones */
+  .why-choose header{ padding: 10px 14px 8px; }
+  .why-choose .body{ padding: 12px 14px 14px; }
+
+  /* Title scales down slightly for nicer wrap */
+  .why-choose header h2{
+    font-size: 1.05rem;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  /* Bullet list: airier rows, easy scan, comfortable tap spacing */
+  .why-choose .wc-list{
+    gap: 12px;
+  }
+  .why-choose .wc-list li{
+    font-size: .98rem;
+    line-height: 1.6;
+    padding-left: 22px;            /* a bit more space for the dot */
+  }
+  .why-choose .wc-list li::before{
+    width: 8px; height: 8px;       /* smaller dot on small screens */
+    top: .8em;
+    box-shadow: 0 0 0 3px rgba(34,197,94,.15);
+  }
+
+  /* Chips under the list: keep them comfy for thumbs */
+  .why-choose .chips{ gap: 10px; }
+  .why-choose .chip{ padding: 8px 12px; }
+
+  /* Stat card beside the form */
+  .stat{
+    padding: 14px;
+    border-radius: 12px;
+  }
+  .stat .hint{
+    font-size: .85rem;
+    margin-bottom: 2px;
+  }
+  .stat strong{
+    font-size: 1.25rem;
+    margin-bottom: 6px;
+  }
+  .stat p{
+    font-size: .95rem;
+    line-height: 1.55;
+    margin-top: 4px;
+  }
+}
+
+/* Ultra-small devices: keep copy crisp and dots aligned */
+@media (max-width: 380px){
+  .why-choose .wc-list li{
+    font-size: .95rem;
+    padding-left: 20px;
+  }
+  .why-choose .wc-list li::before{
+    width: 7px; height: 7px; top: .78em;
+  }
+  .stat strong{ font-size: 1.15rem; }
 }
