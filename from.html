@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<script src="https://www.google.com/recaptcha/api.js?render=6LeQU7ArAAAAAIQxgZF7u263Pox7Z7v-HqHEW6kj"></script>
+
+ <style>
+    /* optional: hide honeypot field */
+    .hp { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+  </style>
+
+</head>
+<body>
+
+
+<form id="contact">
+  <input name="name" placeholder="Your name" required>
+  <input name="email" type="email" placeholder="Your email" required>
+  <textarea name="message" placeholder="Message" required></textarea>
+  <!-- Honeypot -->
+  <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
+  <button type="submit" id="sendBtn">Send</button>
+</form>
+
+
+<script>
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_celmJAK1v0iOpqk1_R4DKvAWVvzKzLEnkQAux8xJk7WmxBnS6IDKLYd7aalEj3n5Eg/exec';
+  const SITE_KEY   = '6LeQU7ArAAAAAIQxgZF7u263Pox7Z7v-HqHEW6kj';
+
+  const form = document.getElementById('contact');
+  const btn  = document.getElementById('sendBtn');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Honeypot check
+    if (form.website && form.website.value) {
+      alert('Blocked (bot suspected).');
+      return;
+    }
+
+    btn.disabled = true; btn.textContent = 'Sending...';
+
+    grecaptcha.ready(function () {
+      grecaptcha.execute(SITE_KEY, { action: 'submit' }).then(async function (token) {
+        const fd = new FormData(form);
+        fd.append('token', token);
+
+        try {
+          const res  = await fetch(SCRIPT_URL, { method: 'POST', body: fd }); // no custom headers => no CORS preflight
+          const text = await res.text();
+
+          // Try to parse JSON (both JSON or plain "ok" will work)
+          let ok = false, msg = text;
+          try { const j = JSON.parse(text); ok = !!j.ok; msg = j.error || 'Sent!'; } catch(_) { ok = /ok/i.test(text); }
+
+          alert(ok ? 'Sent!' : ('Error: ' + msg));
+          if (ok) form.reset();
+        } catch (err) {
+          alert('Failed: ' + err.message);
+        } finally {
+          btn.disabled = false; btn.textContent = 'Send';
+        }
+      });
+    });
+  });
+</script>
+
+
+
+</body>
+</html>
+
+<!-- https://script.google.com/macros/s/AKfycbx_celmJAK1v0iOpqk1_R4DKvAWVvzKzLEnkQAux8xJk7WmxBnS6IDKLYd7aalEj3n5Eg/exec -->
+
+<!-- site key :  6LeQU7ArAAAAAIQxgZF7u263Pox7Z7v-HqHEW6kj -->
+
+<!-- secret key : 6LeQU7ArAAAAAL1C9n_QWcwwBfgv-T6Ll8E-7v6o -->
