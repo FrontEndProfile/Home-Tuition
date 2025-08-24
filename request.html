@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Request a Tutor | Home Tuition</title>
+  <meta name="description"
+    content="Get a free tutor quote fast. Tell us about the student, schedule and budget. We'll match you with verified private tutors." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://example.com/request.html" />
+  <link rel="icon" href="/favicon.ico" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- shared stylesheet with spacing/fieldset fixes -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Request a Tutor | Home Tuition" />
+  <meta property="og:description" content="Share student details and get a free, no-obligation tutor quote." />
+  <meta property="og:url" content="https://example.com/request.html" />
+  <meta property="og:image" content="https://example.com/og/home-tuition-request.jpg" />
+  <!-- reCAPTCHA v3 -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LeQU7ArAAAAAIQxgZF7u263Pox7Z7v-HqHEW6kj"></script>
+  <style>
+
+  </style>
+
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header" aria-label="Site header">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="index.html">
+        <span class="badge" aria-hidden="true">HT</span><span>Home Tuition</span>
+      </a>
+      <div class="tabs" role="tablist">
+        <a class="tab" role="tab" href="index.html">Home</a>
+        <a class="tab" role="tab" aria-current="page" href="request.html">Request a Tutor</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero" aria-label="Hero">
+    <div class="container">
+      <div>
+        <h1>Get a Free Tutor Quote</h1>
+        <p>Answer a few quick questions. We’ll share a shortlist of suitable tutors and prices — no obligation.</p>
+        <div class="chips" aria-label="Popular requests">
+          <span class="chip">Math Quote</span>
+          <span class="chip">Science Quote</span>
+          <span class="chip">English Quote</span>
+          <span class="chip">Junior/IB Quote</span>
+          <span class="chip">Home Tuition (Lahore)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container grid" id="main">
+    <!-- Form -->
+    <section class="card" aria-label="Request form" id="wizard">
+      <header>
+        <h2 id="formTitle">Free Request for Tutor</h2>
+        <div class="steps" style="width:50%" aria-hidden="true">
+          <div class="step"><span id="s1"></span></div>
+          <div class="step"><span id="s2"></span></div>
+          <div class="step"><span id="s3"></span></div>
+        </div>
+      </header>
+
+      <div class="body">
+        <form id="requestForm" action="#" method="post" novalidate aria-describedby="formHelp" aria-live="polite">
+          <p id="formHelp" class="hint">Fields marked * are required.</p>
+
+          <!-- STEP 1: Who + Essentials -->
+          <div class="step-pane" data-step="1">
+            <fieldset>
+              <legend>You are *</legend>
+              <div class="radio-pills" role="radiogroup" aria-label="Who is filling this form">
+                <label class="pill">
+                  <input aria-label="Parent" type="radio" name="who" value="parent" checked> Parent
+                </label>
+                <label class="pill">
+                  <input aria-label="Student" type="radio" name="who" value="student"> Student
+                </label>
+              </div>
+            </fieldset>
+
+
+            <div class="row">
+              <div class="col-6 field">
+                <label for="name">Your Name *</label>
+                <input id="name" name="name" class="input" placeholder="Full name" required autocomplete="name" />
+              </div>
+              <div class="col-6 field">
+                <label for="mobile">Mobile *</label>
+                <input id="mobile" name="mobile" class="input" placeholder="e.g., +92 3XX XXXXXXX" required
+                  autocomplete="tel" pattern="^[+0-9\\s-]{8,}$" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 field">
+                <label for="email">Email *</label>
+                <input id="email" name="email" type="email" class="input" placeholder="you@example.com" required
+                  autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-6 field">
+                <label for="level">Student Level *</label>
+                <select id="level" name="level" class="select" required>
+                  <option value="">Select…</option>
+                  <option>Pre-School</option>
+                  <option>Primary</option>
+                  <option>Lower Secondary</option>
+                  <option>Upper Secondary</option>
+                  <option>Junior College</option>
+                  <option>IB / IGCSE</option>
+                  <option>University</option>
+                </select>
+              </div>
+              <div class="col-6 field">
+                <label for="subjects">Subjects *</label>
+                <input id="subjects" name="subjects" class="input" placeholder="e.g., Math, Physics" required />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 field">
+                <label for="location">Location *</label>
+                <input id="location" name="location" class="input" placeholder="Area/City (e.g., Lahore)" required
+                  autocomplete="address-level2" />
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn" type="button" id="saveDraft1" aria-label="Save draft">Save</button>
+              <div class="right">
+                <button class="btn btn-primary" type="button" data-next aria-label="Next step">Next</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: Schedule & Budget -->
+          <div class="step-pane" data-step="2" hidden>
+            <fieldset>
+              <legend>Budget</legend>
+              <div class="radio-pills">
+                <label class="pill"><input type="radio" name="budgetType" value="market" checked> Comfortable with
+                  market rates</label>
+                <label class="pill"><input type="radio" name="budgetType" value="preferred"> I have a preferred
+                  budget</label>
+              </div>
+            </fieldset>
+
+            <div class="row">
+              <div class="col-6 field" id="preferredWrap" hidden>
+                <label for="rate">Preferred Hourly Rate (PKR)</label>
+                <input id="rate" name="rate" class="input" placeholder="PKR 1500–2500/hr" inputmode="numeric" />
+                <!-- <div class="hint">Tip: Add a range if flexible.</div> -->
+              </div>
+              <!-- <div class="col-6 field">
+                <label for="start">Start Date *</label>
+                <select id="start" name="start" class="select" required>
+                  <option value="asap">ASAP</option>
+                  <option value="date">Pick a date</option>
+                </select>
+              </div> -->
+              <div class="col-6 field" id="dateWrap" hidden>
+                <label for="date">Pick a Date</label>
+                <input id="date" name="date" type="date" class="input" />
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-12 field">
+                <label for="times">All Available Days & Timings *</label>
+                <textarea id="times" name="times" placeholder="e.g., Mon 5–7pm; Wed 3–5pm; Sat mornings"
+                  required></textarea>
+                <div class="hint">State as many options as possible for best matches.</div>
+              </div>
+            </div>
+
+            <!-- Preferred Format removed (we only offer in-home tuition) -->
+
+            <div class="actions">
+              <button class="btn" type="button" data-prev aria-label="Previous step">Previous</button>
+              <div class="right">
+                <button class="btn btn-primary" type="button" data-next aria-label="Next step">Next</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3: Notes & Submit -->
+          <div class="step-pane" data-step="3" hidden>
+            <div class="row">
+              <div class="col-12 field">
+                <label for="needs">Notes for Matching (optional)</label>
+                <textarea id="needs" name="needs"
+                  placeholder="Share any learning goals, issues, tutor preferences, etc."></textarea>
+              </div>
+              <div class="col-12 field">
+                <label for="address">Full Address of Tuition Location *</label>
+                <input id="address" name="address" class="input" placeholder="Street, area, city, postal code" required
+                  autocomplete="street-address" />
+              </div>
+              <div class="col-12 field">
+                <label class="pill"><input type="checkbox" id="agree" required aria-required="true"> I agree to the
+                  Terms & Conditions</label>
+              </div>
+            </div>
+            <!-- HONEYPOT (anti-bot) — DO NOT REMOVE Bots usually fill every visible-looking field. We keep it hidden from users.
+              Backend also ignores this key. -->
+            <div class="hp" aria-hidden="true">
+              <label for="website_hp">Website</label>
+              <input id="website_hp" name="website_hp" type="text" tabindex="-1" autocomplete="off" inputmode="text" placeholder="Do not fill if you are human">
+            </div>
+
+            <div class="actions" style="justify-content:flex-end; gap:10px">
+              <button class="btn" type="button" data-prev aria-label="Previous step">Previous</button>
+              <button class="btn" type="button" id="saveDraft3" aria-label="Save draft">Save Draft</button>
+              <button class="btn btn-primary" type="submit" id="submitBtn" aria-label="Submit request">Get My
+                Quote</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Sidebar -->
+    <aside class="aside" aria-label="Why Home Tuition">
+      <div class="stat">
+        <div class="hint">Step</div>
+        <strong id="stepNum" aria-live="polite">1 / 3</strong>
+        <div class="hint" style="margin-top:10px">Why us?</div>
+        <p style="margin:8px 0 0">Fast matching, verified tutors, and flexible rates.</p>
+      </div>
+      <div class="faq">
+        <strong>Need help?</strong>
+        <p style="margin:8px 0 0">WhatsApp or call your number here. Operating hours can go here.</p>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <small>
+      © 2025 Home Tuition. Helping parents and students connect with trusted tutors.  
+      <a href="coming-soon.html">Terms</a> · <a href="coming-soon.html">Privacy</a>
+    </small>
+  </footer>
+
+
+  <script>
+    // ===== Wizard State =====
+    const panes = [...document.querySelectorAll('.step-pane')];
+    let idx = 0;
+    const s1 = document.getElementById('s1'), s2 = document.getElementById('s2'), s3 = document.getElementById('s3');
+    const stepsEls = [s1, s2, s3].map(s => s.parentElement);   // .step wrappers
+    const stepNum = document.getElementById('stepNum');
+
+    function updateSteps() {
+      // progress (keep your visual logic)
+      s1.style.width = idx >= 0 ? '100%' : '0%';
+      s2.style.width = idx >= 1 ? '100%' : '0%';
+      s3.style.width = idx >= 2 ? '100%' : '0%';
+      stepNum.textContent = (idx + 1) + ' / ' + panes.length;
+      panes.forEach((p, i) => p.hidden = i !== idx);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
+      validateCurrentStep(true);          // mark errors but allow navigation
+      idx = Math.min(idx + 1, panes.length - 1);
+      updateSteps();
+    }));
+    document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => {
+      idx = Math.max(idx - 1, 0);
+      updateSteps();
+    }));
+
+    // ===== Budget toggles =====
+    const budgetRadios = [...document.querySelectorAll('input[name="budgetType"]')];
+    const preferredWrap = document.getElementById('preferredWrap');
+    budgetRadios.forEach(r => r.addEventListener('change', () => {
+      preferredWrap.hidden = (document.querySelector('input[name="budgetType"]:checked').value !== "preferred");
+    }));
+
+    // ===== Integration: Submit to Apps Script with reCAPTCHA v3 =====
+    const form = document.getElementById('requestForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_celmJAK1v0iOpqk1_R4DKvAWVvzKzLEnkQAux8xJk7WmxBnS6IDKLYd7aalEj3n5Eg/exec';
+    const SITE_KEY = '6LeQU7ArAAAAAIQxgZF7u263Pox7Z7v-HqHEW6kj';
+
+    // ——— toast / status banner
+    const statusBar = document.createElement('div');
+    statusBar.id = 'toast';
+    statusBar.setAttribute('role', 'status');
+    statusBar.style.cssText = 'position:fixed;left:50%;top:16px;transform:translateX(-50%);max-width:90vw;padding:10px 14px;border-radius:10px;font:500 14px/1.3 system-ui, -apple-system, Segoe UI, Roboto;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:9999;display:none';
+    document.body.appendChild(statusBar);
+    function showMsg(text, type = 'ok') { // ok | err
+      statusBar.textContent = text;
+      statusBar.style.background = type === 'ok' ? '#DCFCE7' : '#FEE2E2';
+      statusBar.style.color = type === 'ok' ? '#065F46' : '#991B1B';
+      statusBar.style.border = type === 'ok' ? '1px solid #86EFAC' : '1px solid #FCA5A5';
+      statusBar.style.display = 'block';
+      setTimeout(() => { statusBar.style.display = 'none'; }, 4000);
+    }
+
+    // ——— step validation helpers
+    const F = (id) => document.getElementById(id);
+    const fieldsByStep = [
+      // step 1
+      [F('name'), F('mobile'), F('email'), F('level'), F('subjects'), F('location')],
+      // step 2
+      [F('times')], // dynamic: rate only if preferred
+      // step 3
+      [F('address'), F('agree')]
+    ];
+
+    function markField(el, valid, msg) {
+      const wrap = el.closest('.field') || el.parentElement;
+      if (valid) {
+        wrap?.classList.remove('invalid');
+        const err = wrap?.querySelector('.err'); if (err) err.remove();
+        el.removeAttribute('aria-invalid');
+      } else {
+        wrap?.classList.add('invalid');
+        el.setAttribute('aria-invalid', 'true');
+        if (wrap && !wrap.querySelector('.err')) {
+          const small = document.createElement('small');
+          small.className = 'err';
+          small.textContent = msg || 'This field is required';
+          wrap.appendChild(small);
+        }
+      }
+    }
+
+    function validateStep(stepIndex) {
+      const missing = [];
+      const els = [...fieldsByStep[stepIndex]];
+      // dynamic rules
+      if (stepIndex === 1) {
+        const pref = document.querySelector('input[name="budgetType"]:checked')?.value === 'preferred';
+        if (pref) els.push(F('rate'));
+      }
+      els.forEach(el => {
+        if (!el) return;
+        let ok = true;
+        if (el.type === 'checkbox') ok = el.checked;
+        else ok = !!String(el.value || '').trim();
+        markField(el, ok);
+        if (!ok) missing.push(el);
+      });
+      return missing;
+    }
+
+    function validateCurrentStep(markOnly = false) {
+      const missing = validateStep(idx);
+      // flag step header
+      stepsEls[idx].classList.toggle('error', missing.length > 0);
+      if (missing.length > 0 && markOnly) {
+        showMsg(`Step ${idx + 1}: ${missing.length} required field(s) missing.`, 'err');
+      }
+      return missing.length === 0;
+    }
+
+    function validateAll() {
+      let firstBad = -1, totalMissing = 0;
+      stepsEls.forEach((_, i) => {
+        const miss = validateStep(i);
+        stepsEls[i].classList.toggle('error', miss.length > 0);
+        if (miss.length > 0 && firstBad === -1) firstBad = i;
+        totalMissing += miss.length;
+      });
+      return { ok: totalMissing === 0, firstBad };
+    }
+
+    // ——— map backend error → friendly text
+    function friendlyError(raw = '') {
+      const t = String(raw || '').toLowerCase();
+      if (t.includes('missing_recaptcha_secret')) return 'Server config missing. Please try again shortly.';
+      if (t.includes('recaptcha_secret') || t.includes('script property')) return 'Server not fully configured. Please try again shortly.';
+      if (t.includes('recaptcha_failed')) return 'Bot check failed. Refresh and try again.';
+      if (t.includes('missing_recaptcha_token')) return 'Couldn’t verify token. Refresh and try again.';
+      if (t.includes('origin_not_allowed')) return 'This domain is not allowed to submit the form.';
+      if (t.includes('low_score')) return 'Submission looked automated. Please try again.';
+      if (t.includes('quota') || t.includes('limit')) return 'Email quota reached. Please try again later.';
+      return raw || 'Something went wrong. Please try again.';
+    }
+
+    // ——— submit handler
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // hard validation across all steps
+      const v = validateAll();
+      if (!v.ok) {
+        idx = v.firstBad >= 0 ? v.firstBad : 0;
+        updateSteps();
+        showMsg('Please fill the required fields before submitting.', 'err');
+        return;
+      }
+
+      // Honeypot
+      if (form.website_hp && form.website_hp.value) { showMsg('Blocked (bot suspected).', 'err'); return; }
+
+      // UI lock
+      submitBtn.disabled = true; submitBtn.textContent = 'Submitting…';
+
+      grecaptcha.ready(function () {
+        grecaptcha.execute(SITE_KEY, { action: 'submit' }).then(async function (token) {
+          const fd = new FormData(form);
+          fd.append('token', token);
+
+          const summary = [
+            'Who: ' + (form.who.value || ''),
+            'Level: ' + (form.level.value || ''),
+            'Subjects: ' + (form.subjects.value || ''),
+            'Location: ' + (form.location.value || ''),
+            'Budget: ' + (form.budgetType.value || '') + (form.rate?.value ? (' (' + form.rate.value + ')') : ''),
+            'Times: ' + (form.times.value || '')
+          ].join(' | ');
+          fd.append('summary', summary);
+
+          try {
+            const res = await fetch(SCRIPT_URL, { method: 'POST', body: fd });
+            const text = await res.text();
+            let ok = false, err = '';
+            try { const j = JSON.parse(text); ok = !!j.ok; err = j.error || ''; }
+            catch { ok = /{"ok":\s*true}/i.test(text) || /ok/i.test(text); }
+
+            if (!ok) {
+              showMsg(friendlyError(err), 'err');
+            } else {
+              showMsg('Thanks! We’ll WhatsApp/Email you a quote shortly.', 'ok');
+              form.reset(); stepsEls.forEach(s => s.classList.remove('error'));
+              idx = 0; updateSteps();
+            }
+          } catch (e) {
+            showMsg('Network error. Please check your connection and try again.', 'err');
+          } finally {
+            submitBtn.disabled = false; submitBtn.textContent = 'Get My Quote';
+          }
+        });
+      });
+    });
+
+    // init
+    updateSteps();
+
+    // ===== Local Storage: Save & Load Draft =====
+    const STORAGE_KEY = "tutorRequestDraft";
+
+    // helper: form → object
+    function getFormData() {
+      const data = {};
+      new FormData(form).forEach((v, k) => data[k] = v);
+      return data;
+    }
+
+    // helper: object → form fill
+    function setFormData(data) {
+      Object.keys(data || {}).forEach(k => {
+        const el = form.elements[k];
+        if (!el) return;
+        if (el.type === "radio") {
+          const radio = form.querySelector(`input[name="${k}"][value="${data[k]}"]`);
+          if (radio) radio.checked = true;
+        } else if (el.type === "checkbox") {
+          el.checked = data[k] === "on" || data[k] === true;
+        } else {
+          el.value = data[k];
+        }
+      });
+    }
+
+    // save draft function
+    function saveDraft() {
+      const data = getFormData();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      showMsg("Draft saved locally. You can continue later.", "ok");
+    }
+
+    // attach to Save buttons
+    document.getElementById("saveDraft1")?.addEventListener("click", saveDraft);
+    document.getElementById("saveDraft3")?.addEventListener("click", saveDraft);
+
+    // auto-fill on load if draft exists
+    window.addEventListener("DOMContentLoaded", () => {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        try {
+          const data = JSON.parse(raw);
+          setFormData(data);
+          showMsg("Draft data loaded from previous session.", "ok");
+        } catch {}
+      }
+    });
+
+  </script>
+
+
+</body>
+
+</html>

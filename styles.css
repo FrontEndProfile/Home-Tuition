@@ -1,0 +1,342 @@
+/* =============================
+   Home Tuition - Shared Styles
+   Files: home.html, request.html
+   ============================= */
+
+/* --- Reset (trimmed) --- */
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.6;color:#0f172a;background:#f7faf9}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+input,button,select,textarea{font:inherit}
+
+/* --- Theme --- */
+:root{
+  --primary:#22c55e;
+  --primary-600:#16a34a;
+  --ink:#0f172a;
+  --muted:#475569;
+  --surface:#ffffff;
+  --surface-2:#f0fdf4;
+  --border:#e5e7eb;
+  --ring:0 0 0 3px rgba(34,197,94,.28);
+  --shadow:0 12px 30px rgba(2,6,23,.08);
+  --radius:16px;
+}
+/* Honeypot field — human users won't see it */
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.is-loading {
+  opacity: .7;
+  pointer-events: none;
+}
+
+/* --- Layout --- */
+.container{max-width:1100px;margin-inline:auto;padding:24px}
+.site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700}
+.badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#06b6d4);display:grid;place-items:center;color:#fff;font-weight:800}
+.tabs{display:flex;gap:10px}
+.tab{padding:8px 12px;border:1px solid var(--border);border-radius:12px;background:#fff}
+.tab[aria-current="page"],.tab.active,.tab:focus{background:var(--primary);border-color:var(--primary);color:#fff}
+
+.hero{background:linear-gradient(180deg,#ecfdf5,transparent)}
+.hero .container{display:flex;flex-wrap:wrap;align-items:center;gap:18px}
+.hero h1{font-size:clamp(1.7rem,3vw,2.3rem);margin:8px 0}
+.hero p{color:var(--muted);max-width:65ch;margin:0;margin-bottom: 0.5rem;}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--border)}
+
+/* --- Grid / Cards --- */
+.grid{display:grid;grid-template-columns:1fr 360px;gap:24px;margin-top:20px}
+@media (max-width:1000px){.grid{grid-template-columns:1fr}.aside{ position: static; }}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px}
+.card header h2{margin:0}
+.card .body{padding:18px}
+.col-main{
+  display:grid;
+  gap:24px;             /* equal spacing between stacked cards */
+}
+
+/* --- Form base --- */
+.field{display:grid;gap:8px;margin-bottom: 12px;}
+.field label{font-weight:600}
+.hint{color:var(--muted);font-size:.9rem;margin-top:4px}
+.field .err { display:block; font-size:12px; color:#B91C1C; margin-top:6px; }
+.field.invalid .input, .field.invalid textarea, .field.invalid select{
+    border-color:#EF4444 !important; box-shadow:0 0 0 4px rgb(239 68 68 / 10%) !important;
+}
+
+.row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
+.col-3{grid-column:span 3}
+.col-4{grid-column:span 4}
+.col-6{grid-column:span 6}
+.col-8{grid-column:span 8}
+.col-12{grid-column:span 12}
+@media (max-width:720px){.col-3,.col-4,.col-6,.col-8{grid-column:span 12}}
+
+.input,.select,textarea{
+  width:100%;padding:12px 14px;border:1px solid var(--border);
+  border-radius:12px;background:#fff
+}
+textarea{min-height:120px;resize:vertical}
+select{
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;background-size:18px;
+  padding-right:36px; /* so text never collides with arrow */
+}
+
+/* Radio pills */
+.radio-pills{display:flex;flex-wrap:wrap;gap:10px}
+.pill{
+  display:flex;align-items:center;gap:8px;padding:8px 12px;
+  border:1px solid var(--border);border-radius:999px;background:#fff;cursor:pointer
+}
+.pill input{accent-color:var(--primary)}
+/* highlight selected pill (modern browsers) */
+.pill:has(input:checked){
+  border-color:var(--primary);background:var(--surface-2);
+  box-shadow:0 0 0 3px rgba(34,197,94,.12) inset
+}
+
+/* --- Steps progress --- */
+
+.steps{display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface);border:1px dashed var(--border);border-radius:12px;margin-left:auto}
+.step{flex:1;height:8px;background:#e2e8f0;border-radius:999px;position:relative;overflow:hidden}
+.step span{position:absolute;inset:0;width:0;background:var(--primary);transition:width .35s ease}
+.steps .step.error span{ background:#FCA5A5 !important; }   /* step pill turns red */
+
+/* --- Buttons --- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:40px;padding:10px 14px;border-radius:12px;border:1px solid var(--border);
+  background:#fff;cursor:pointer;transition:transform .12s ease
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn-primary:hover{filter:brightness(.98)}
+.actions{display:flex;justify-content:space-between;gap:10px;margin-top:24px}
+.actions .right{display:flex;gap:10px}
+
+/* --- Aside --- */
+.aside{position:sticky;top:84px;align-self:start}
+.stat{padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.stat strong{font-size:1.25rem;color:var(--primary-600)}
+.faq{padding:16px;background:var(--surface-2);border:1px dashed #bbf7d0;border-radius:12px;margin-top:12px}
+
+/* --- Accessibility --- */
+:focus-visible{outline:none;box-shadow:var(--ring)}
+.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+.skip-link:focus{left:16px;top:16px;width:auto;height:auto;background:#fff;border:2px solid var(--primary);padding:8px 12px;border-radius:10px;z-index:100}
+
+/* --- Footer --- */
+footer{border-top:1px solid var(--border);padding:16px 0;color:var(--muted);text-align:center;margin-top:24px}
+
+/* === Request page UX fixes === */
+/* 1) 'You are *' -> clean block (no fieldset border) */
+fieldset{border:1px solid var(--border);border-radius:12px;padding:12px;margin:0;margin-bottom: 12px;}
+fieldset.legendless{border:0;padding:0}
+
+/* 2) Form rhythm (equal vertical spacing across panes) */
+.body form{display:grid;gap:16px}
+.step-pane .row{margin-top:0}   /* rely on row gap only */
+
+/* 3) Start Date + Date picker alignment */
+/* #dateWrap{align-self:end}  aligns with Start Date on wide screens */
+
+/* 4) Make labels tight & consistent */
+.field label{margin-bottom:2px}
+
+/* 5) Buttons width a bit stable */
+.actions .btn{min-width:100px}
+
+
+/* === Coming Soon page helpers (match green theme) === */
+
+/* Center content vertically within viewport minus header/footer */
+.center-screen{
+  min-height: calc(100vh - 140px);
+  display: grid;
+  place-items: center;
+}
+
+/* Card tweaks for CS page */
+.cs-card{ max-width: 560px; width: 100%; }
+.cs-header{
+  display:flex; align-items:center; gap:12px;
+  padding:16px 18px; border-bottom:1px solid var(--border);
+}
+.cs-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:grid;place-items:center;
+  background: var(--surface-2);
+  border:1px solid var(--border);
+  font-weight:700; color: var(--primary-600);
+}
+.cs-card .body{ padding:18px }
+.lead{ font-size:1.05rem; margin:0 0 .25rem 0; color:var(--ink); }
+.muted{ color:var(--muted); margin:0 0 .75rem 0; }
+.cs-actions{ display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; }
+
+
+
+/* ===== About section (personal brand) ===== */
+.about-body{display:grid;grid-template-columns:220px 1fr;gap:18px}
+.card.about .body { padding: 22px 22px 18px; }
+@media (max-width:860px){.about-body{grid-template-columns:1fr}}
+
+.avatar{
+  width:96px;height:96px;border-radius:50%;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--primary),#06b6d4);
+  color:#fff;font-weight:800;font-size:28px;letter-spacing:.5px;
+  box-shadow:var(--shadow);
+  margin-bottom:10px;
+}
+
+.badge-list{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:8px}
+.badge-soft{
+  display:inline-block;padding:6px 10px;border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--border);font-size:12px
+}
+
+.mini-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:12px;height:100%
+}
+.mini-card p {margin-block:0.4rem 0;font-size:.9rem}
+
+.about-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+
+/* pills grid */
+.pill-grid{display:flex;flex-wrap:wrap;gap:10px}
+
+/* quotes */
+.quotes{display:grid;gap:14px}
+.quotes blockquote{
+  margin:0;padding:12px 14px;border-left:4px solid var(--primary);
+  background:#fff;border:1px solid var(--border);border-radius:12px
+}
+.quotes footer{margin-top:6px;color:var(--muted);font-size:.9rem}
+
+/* wide CTA */
+.cta-wide{display:flex;align-items:center;justify-content:space-between;gap:16px}
+@media (max-width:640px){.cta-wide{flex-direction:column;align-items:flex-start}}
+
+
+
+/* // Next sari mobile screen ki Responsvie ak hi jgha pr krnia ha */
+/* =========================
+   About section refinements
+   ========================= */
+
+/* give the right column more air and a larger content width */
+.about-body{display:grid;grid-template-columns:220px 1fr;gap:24px}
+.about-right{display:grid;gap:18px;max-width:780px}
+@media (max-width:860px){
+  .about-body{grid-template-columns:1fr}
+}
+
+/* mini info cards – look less cramped on desktop, roomier copy line-height */
+.mini-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 16px;
+}
+.mini-card p{margin:8px 0 0;line-height:1.55}
+
+/* tighten the badges’ spacing a touch */
+.badge-list{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:8px}
+.badge-soft{
+  display:inline-block;padding:6px 10px;border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--border);font-size:12px
+}
+
+/* About avatar stays same size, just a tiny visual bump */
+.avatar{
+  width:96px;height:96px;border-radius:50%;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--primary),#06b6d4);
+  color:#fff;font-weight:800;font-size:28px;letter-spacing:.5px;
+  box-shadow:var(--shadow);
+}
+
+/* CTA alignment */
+.about-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;justify-content: flex-end;}
+
+/* the two right-column rows: add a little vertical air between them */
+.about-right .row{margin-top:6px}
+
+/* Prevent the aside card from overlapping the About card on short viewports */
+@media (max-width:1100px){
+  .aside{position:static;margin-top:16px}
+}
+
+/* =========================
+   Header tabs (mobile)
+   ========================= */
+ /* Hide the active tab on small screens to save space */
+@media (max-width: 560px){
+  /* If you set the current page via aria-current */
+  .tabs .tab[aria-current="page"]{ display:none; }
+
+  /* …or, if sometimes you use a class-based state */
+  .tabs .tab.active{ display:none; }
+
+  /* Make sure the remaining tab aligns nicely */
+  .tabs{
+    flex:1;
+    display:flex;
+    gap:8px;
+    justify-content:flex-end;   /* pushes the remaining tab to the right */
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .about-cta {justify-content:flex-start;} /* left-align the buttons */
+}
+@media (max-width: 420px){
+  #toast {width: 75%;}
+}
+
+/* =========================
+   Footer spacing (mobile)
+   ========================= */
+@media (max-width:560px){
+  footer{padding:18px 20px}
+}
+
+/* =========================
+   Toast / status bar (mobile)
+   ========================= */
+/* we’ll give the toast an id so we can style it here (see JS below) */
+#toast{
+  max-width:92vw;
+  left:50%;
+  transform:translateX(-50%);
+  top:12px;
+  padding:8px 12px;
+  border-radius:10px;
+  font-size:14px;
+}
+
+/* =========================
+   Global mobile polish
+   ========================= */
+@media (max-width:640px){
+  .container{padding:18px}
+  .grid{grid-template-columns:1fr;gap:18px}
+  .card header{padding:14px 16px}
+  .card .body{padding:16px}
+  .chip{padding:7px 10px}
+}
