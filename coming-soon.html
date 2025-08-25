@@ -3,12 +3,58 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Coming Soon | Home Tuition</title>
 
+  <title>Coming Soon | Zahra Home Tuition (Lahore)</title>
+  <meta name="author" content="Zahra Mubeen" />
+  <meta name="topic" content="Private Tutor, Home Tuition, Exam Preparation, Math, Science, English, Biology" />
+  <meta name="coverage" content="Lahore, Pakistan" />
+  <meta name="target" content="Parents, Students, Guardians" />
+  <meta name="identifier-URL" content="https://zahra-tuition.vercel.app/" />
+  <meta name="resource-type" content="document" />
+  <!-- Keywords (not a ranking factor, but you asked for it) -->
+  <meta name="keywords" content="home tuition Lahore, private tutor Lahore, FSc tutor, matric tutor, grade 4 to FSc tutor" />
+  <meta name="description" content="Our Terms & Privacy pages are being prepared. Meanwhile, you can use the site as usual." />
+
+  <!-- IMPORTANT: don't index thin/placeholder pages -->
+  <meta name="robots" content="index,follow" />
+
+  <!-- Canonical to this page -->
+  <link rel="canonical" href="https://zahra-tuition.vercel.app/coming-soon.html" />
+
+  <!-- Favicons / PWA basics -->
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#22c55e" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <!-- Performance: fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <!-- Your CSS -->
   <link rel="stylesheet" href="styles.css"/>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Zahra Home Tuition" />
+  <meta property="og:title" content="Coming Soon | Zahra Home Tuition" />
+  <meta property="og:description" content="These pages are being prepared. You can continue using the site as usual." />
+  <meta property="og:url" content="https://zahra-tuition.vercel.app/coming-soon.html" />
+  <meta property="og:image" content="https://zahra-tuition.vercel.app/Zahra-Mubeen-Home-Tuition.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Coming Soon | Zahra Home Tuition" />
+  <meta name="twitter:description" content="These pages are being prepared. Please check back soon." />
+  <meta name="twitter:image" content="https://zahra-tuition.vercel.app/Zahra-Mubeen-Home-Tuition.jpg" />
+
+  <!-- Optional: hreflang for region clarity -->
+  <link rel="alternate" href="https://zahra-tuition.vercel.app/coming-soon.html" hreflang="en-pk" />
+
+
 </head>
 <body>
   <header class="site-header" aria-label="Site header">
@@ -47,75 +93,6 @@
       <a href="coming-soon.html">Terms</a> · <a href="coming-soon.html">Privacy</a>
     </small>
   </footer>
-
-<a id="waQuick" class="btn" target="_blank" rel="noopener noreferrer"
-   aria-label="Chat on WhatsApp with prefilled details">
-  Chat on WhatsApp
-</a>
-
-<script>
-  // Whatsapp Quick Message Link with Prefilled Details
-  document.addEventListener('DOMContentLoaded', () => {
-    const WA_NUMBER = '923494486605'; // your real WhatsApp number (digits only)
-
-    const waBtn = document.getElementById('waQuick');
-    if (!waBtn) return;
-
-    const form = document.getElementById('requestForm');
-
-    const val = (el, ph) => {
-      if (!el) return ph;
-      const v = (typeof el === 'string') ? el : (el.value || '');
-      return v.trim() || ph;
-    };
-
-    function buildMessage() {
-      const name     = form?.name;
-      const level    = form?.level;
-      const subjects = form?.subjects;
-      const location = form?.location;
-      const times    = form?.times;
-      const mobile   = form?.mobile;
-      const email    = form?.email;
-      const age      = form?.age;
-      const school   = form?.school;
-
-      return [
-        `*🏫 Home Tuition Inquiry — Thokar Niaz Baig*`,
-        ``,
-        `*My name:* ${val(name, 'Type your name')}`,
-        `*Student level / class:* ${val(level, 'e.g., Grade 8 / O-Levels')}`,
-        `*Subjects:* ${val(subjects, 'e.g., Math, Science')}`,
-        `*Location:* ${val(location, 'Area/Street name')}`,
-        `*Age:* ${val(age, 'Age (optional)')}`,
-        `*School:* ${val(school, 'School name (optional)')}`,
-      ].join("\n");
-    }
-
-
-    function makeUrl() {
-      const msg = encodeURIComponent(buildMessage());
-      return `https://wa.me/${WA_NUMBER}?text=${msg}`;
-    }
-
-    if (form) waBtn.href = makeUrl();
-
-    waBtn.addEventListener('click', (e) => {
-      const url = makeUrl();
-      waBtn.href = url;
-      window.open(url, '_blank', 'noopener');
-      e.preventDefault();
-    });
-
-    if (form) {
-      ['name','level','subjects','location','times','mobile','email','age','school']
-        .forEach(id => form[id]?.addEventListener('input', () => {
-          waBtn.href = makeUrl();
-        }));
-    }
-  });
-  // Whatsapp Quick Message Link with Prefilled Details - END
-</script>
 
 
 
