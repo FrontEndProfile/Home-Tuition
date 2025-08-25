@@ -11,6 +11,20 @@ img,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 input,button,select,textarea{font:inherit}
 
+/* Chrome, Safari, Edge */
+input::-webkit-calendar-picker-indicator,
+input::-webkit-list-button,
+input::-webkit-inner-spin-button {
+  display: none !important;
+  -webkit-appearance: none !important;
+}
+
+/* Firefox */
+input::-moz-list {
+  display: none !important;
+}
+
+
 /* --- Theme --- */
 :root{
   --primary:#22c55e;

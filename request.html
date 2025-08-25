@@ -117,7 +117,7 @@
               <div class="col-6 field">
                 <label for="level">Student Level *</label>
                 <select id="level" name="level" class="select" required>
-                  <option value="">Select…</option>
+                  <option value="" disabled selected>Select…</option>
                   <option>Grade 4</option>
                   <option>Grade 5</option>
                   <option>Grade 6</option>
@@ -135,25 +135,39 @@
               </div> -->
               <div class="col-6 field" id="subjectPicker">
                 <label for="subjectsInput">Subjects *</label>
-
                 <div class="chip-input" aria-haspopup="listbox" aria-owns="subj-suggest" aria-expanded="false">
-                  <input id="subjectsInput" class="input chip-editor" type="text"
-                        placeholder="Type to add… e.g., Math" autocomplete="off" enterkeyhint="done" />
+                  <input id="subjectsInput" class="input chip-editor" type="text" placeholder="Type to add… e.g., Math" autocomplete="off" enterkeyhint="done" />
                   <div class="chip-bag" id="subjChips"></div>
                 </div>
-
                 <ul id="subj-suggest" class="suggestions" role="listbox" hidden></ul>
-
                 <input id="subjects" name="subjects" type="hidden" required />
               </div>
 
             </div>
             <div class="row">
-              <div class="col-12 field">
+              <!-- <div class="col-12 field">
                 <label for="location">Location *</label>
                 <input id="location" name="location" class="input" placeholder="Area/City (e.g., Lahore)" required
                   autocomplete="address-level2" />
-              </div>
+              </div> -->
+
+              <div class="col-12 field">
+                <label for="location">Location *</label>
+                <input id="location" name="location" class="input" placeholder="Area/City (e.g., Thokar Niaz Baig, Lahore)" required autocomplete="address-level2" list="location-list" />
+                <datalist id="location-list">
+                    <option value="Thokar Niaz Baig, Lahore"></option>
+                    <option value="Johar Town, Lahore"></option>
+                    <option value="Model Town, Lahore"></option>
+                    <option value="Wapda Town, Lahore"></option>
+                    <option value="DHA, Lahore"></option>
+                    <option value="Bahria Town, Lahore"></option>
+                    <option value="Garden Town, Lahore"></option>
+                    <option value="Faisal Town, Lahore"></option>
+                    <option value="Iqbal Town, Lahore"></option>
+                    <option value="Gulberg, Lahore"></option>
+                </datalist>
+                </div>
+
             </div>
 
             <div class="actions">
@@ -177,11 +191,24 @@
             </fieldset>
 
             <div class="row">
-              <div class="col-6 field" id="preferredWrap" hidden>
+              <!-- <div class="col-6 field" id="preferredWrap" hidden>
                 <label for="rate">Preferred Hourly Rate (PKR)</label>
                 <input id="rate" name="rate" class="input" placeholder="PKR 1500–2500/hr" inputmode="numeric" />
-                <!-- <div class="hint">Tip: Add a range if flexible.</div> -->
-              </div>
+              </div> -->
+              <div class="col-6 field" id="preferredWrap" hidden>
+                <label for="rate">Preferred Hourly Rate (PKR)</label>
+                <input id="rate" name="rate" class="input" placeholder="PKR 2500–5500/hr" inputmode="numeric" list="rate-list" />
+                <datalist id="rate-list">
+                    <option value="2000/hr"></option>
+                    <option value="2500/hr"></option>
+                    <option value="3500/hr"></option>
+                    <option value="4000/hr"></option>
+                    <option value="6000/hr"></option>
+                    <option value="7200/hr"></option>
+                    <option value="7500/hr"></option>
+                </datalist>
+                </div>
+
               <!-- <div class="col-6 field">
                 <label for="start">Start Date *</label>
                 <select id="start" name="start" class="select" required>
