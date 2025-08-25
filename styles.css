@@ -107,7 +107,9 @@ input,button,select,textarea{font:inherit}
   margin-top:24px;
 }
 .actions .right{display:flex;gap:10px}
-
+@media (max-width:450px){
+  .hp + .actions{flex-wrap: wrap;justify-content: flex-start !important;}
+}
 /* --- Tabs --- */
 .tabs{
   display:flex;
