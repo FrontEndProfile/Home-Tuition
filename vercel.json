@@ -1,0 +1,22 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "zahra-mubeen.vercel.app" }],
+      "destination": "https://zahra-tuition.vercel.app/$1",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "home-tuition-thokar-niaz-baig.vercel.app" }],
+      "destination": "https://zahra-tuition.vercel.app/$1",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "home-tuition-lahore.vercel.app" }],
+      "destination": "https://zahra-tuition.vercel.app/$1",
+      "permanent": true
+    }
+  ]
+}
