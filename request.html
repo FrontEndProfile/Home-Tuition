@@ -50,14 +50,14 @@
   <section class="hero" aria-label="Hero">
     <div class="container">
       <div>
-        <h1>Get a Free Tutor Quote</h1>
-        <p>Answer a few quick questions. We’ll share a shortlist of suitable tutors and prices — no obligation.</p>
+        <h1>Get a tutor near you — quick quote</h1>
+        <p>Tell us the class, subjects and preferred timings. We’ll reply with tutor options and transparent rates.</p>
         <div class="chips" aria-label="Popular requests">
-          <span class="chip">Math Quote</span>
-          <span class="chip">Science Quote</span>
-          <span class="chip">English Quote</span>
-          <span class="chip">Junior/IB Quote</span>
-          <span class="chip">Home Tuition (Lahore)</span>
+          <span class="chip">Grade 4–8 (All)</span>
+          <span class="chip">Matric (All)</span>
+          <span class="chip">F.Sc (Pre-Med)</span>
+          <span class="chip">F.Sc (Pre-Eng)</span>
+          <span class="chip">Thokar Niaz Baig Area</span>
         </div>
       </div>
     </div>
@@ -127,10 +127,25 @@
                   <option>University</option>
                 </select>
               </div>
-              <div class="col-6 field">
+              <!-- <div class="col-6 field">
                 <label for="subjects">Subjects *</label>
                 <input id="subjects" name="subjects" class="input" placeholder="e.g., Math, Physics" required />
+              </div> -->
+                            
+              <div class="col-6 field" id="subjectPicker">
+                <label for="subjectsInput">Subjects *</label>
+
+                <div class="chip-input" aria-haspopup="listbox" aria-owns="subj-suggest" aria-expanded="false">
+                  <input id="subjectsInput" class="input chip-editor" type="text"
+                        placeholder="Type to add… e.g., Math" autocomplete="off" />
+                  <div class="chip-bag" id="subjChips"></div>
+                </div>
+
+                <ul id="subj-suggest" class="suggestions" role="listbox" hidden></ul>
+
+                <input id="subjects" name="subjects" type="hidden" required />
               </div>
+
             </div>
             <div class="row">
               <div class="col-12 field">
@@ -577,6 +592,123 @@
 
   </script>
 
+
+
+<script>
+(() => {
+  const SUGGESTIONS = [
+    "Math", "Science", "Biology", "Chemistry", "Physics",
+    "English", "Urdu", "Computer", "Islamiyat", "Pak Studies",
+    "General Knowledge"
+  ];
+
+  const root   = document.getElementById('subjectPicker');
+  if (!root) return;
+
+  const editor = root.querySelector('#subjectsInput');
+  const bag    = root.querySelector('#subjChips');
+  const hidden = root.querySelector('#subjects');
+  const list   = root.querySelector('#subj-suggest');
+
+  let picked = [];       // current chips
+  const maxChips = 10;   // sane upper bound
+
+  const norm = s => s.trim().replace(/\s+/g, ' ');
+  const syncHidden = () => hidden.value = picked.join(', ');
+
+  function renderChips() {
+    bag.innerHTML = '';
+    picked.forEach((label, i) => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip chip--soft';
+      chip.textContent = label;
+      chip.title = 'Remove';
+      chip.addEventListener('click', () => {
+        picked.splice(i,1); renderChips(); syncHidden(); editor.focus();
+      });
+      bag.appendChild(chip);
+    });
+  }
+
+  function addChip(value) {
+    value = norm(value);
+    if (!value) return;
+    if (picked.includes(value)) return;
+    if (picked.length >= maxChips) return;
+    picked.push(value);
+    renderChips(); syncHidden();
+  }
+
+  function showSuggestions(query='') {
+    const q = norm(query).toLowerCase();
+    const items = SUGGESTIONS
+      .filter(s => !picked.includes(s))
+      .filter(s => !q || s.toLowerCase().includes(q))
+      .slice(0, 8);
+
+    list.innerHTML = '';
+    items.forEach((s, idx) => {
+      const li = document.createElement('li');
+      li.role = 'option';
+      li.tabIndex = -1;
+      li.textContent = s;
+      li.addEventListener('mousedown', (e) => { // mousedown to fire before blur
+        e.preventDefault(); addChip(s); editor.value=''; hideSuggestions();
+      });
+      list.appendChild(li);
+      if (idx === 0) li.classList.add('is-active');
+    });
+
+    if (items.length) {
+      list.hidden = false;
+      root.querySelector('.chip-input').setAttribute('aria-expanded','true');
+    } else hideSuggestions();
+  }
+  function hideSuggestions(){
+    list.hidden = true;
+    root.querySelector('.chip-input').setAttribute('aria-expanded','false');
+  }
+
+  // Add on Enter/Comma/Tab
+  editor.addEventListener('keydown', (e) => {
+    if (['Enter', 'Tab'].includes(e.key) || (e.key === ',')) {
+      const active = list.querySelector('.is-active');
+      if (active && !list.hidden) {
+        addChip(active.textContent);
+        editor.value=''; hideSuggestions();
+      } else if (editor.value.trim()) {
+        addChip(editor.value); editor.value=''; hideSuggestions();
+      }
+      if (e.key !== 'Tab') e.preventDefault();
+    }
+    // Backspace on empty -> remove last chip
+    if (e.key === 'Backspace' && !editor.value && picked.length) {
+      picked.pop(); renderChips(); syncHidden();
+      e.preventDefault();
+    }
+    // Arrow nav in suggestions
+    if (!list.hidden && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+      const items = [...list.children];
+      let i = items.findIndex(li => li.classList.contains('is-active'));
+      i = (e.key === 'ArrowDown') ? (i+1) % items.length : (i-1+items.length)%items.length;
+      items.forEach(li => li.classList.remove('is-active'));
+      items[i].classList.add('is-active');
+      e.preventDefault();
+    }
+    if (e.key === 'Escape') hideSuggestions();
+  });
+
+  editor.addEventListener('input', () => showSuggestions(editor.value));
+  editor.addEventListener('focus', () => showSuggestions(editor.value));
+  editor.addEventListener('blur',  () => setTimeout(hideSuggestions, 120));
+
+  // Seed from server value (if any)
+  if (hidden.value) {
+    hidden.value.split(',').map(norm).filter(Boolean).forEach(addChip);
+  }
+})();
+</script>
 
 </body>
 

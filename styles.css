@@ -203,7 +203,7 @@ input,button,select,textarea{font:inherit}
 }
 
 /* --- Form base --- */
-.field{display:grid;gap:8px;margin-bottom: 12px;}
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom: 12px;}
 .field label{font-weight:600}
 .hint{color:var(--muted);font-size:.9rem;margin-top:4px}
 .field .err { display:block; font-size:12px; color:#B91C1C; margin-top:6px; }
@@ -237,7 +237,7 @@ select{
   display:flex;align-items:center;gap:8px;padding:8px 12px;
   border:1px solid var(--border);border-radius:999px;background:#fff;cursor:pointer
 }
-.pill input{accent-color:var(--primary)}
+.pill input{accent-color:var(--primary);margin: 0;}
 /* highlight selected pill (modern browsers) */
 .pill:has(input:checked){
   border-color:var(--primary);background:var(--surface-2);
@@ -640,4 +640,66 @@ fieldset.legendless{border:0;padding:0}
     width: 7px; height: 7px; top: .78em;
   }
   .stat strong{ font-size: 1.15rem; }
+}
+
+
+
+/* =========================
+   Chips input + dropdown
+   ========================= */
+/* Anchor for absolute dropdown */
+#subjectPicker{ position: relative; }
+
+/* Chip box: input on top, chips below (no jump) */
+.chip-input{
+  display:flex; flex-direction:column; align-items:flex-start;
+  gap:6px; min-height:44px; padding:6px;
+  border:1px solid var(--border); border-radius:12px; background:#fff;
+  padding-bottom: 0;
+}
+.chip-editor{ width:100%; border:0; outline:none; padding:6px 8px; }
+.chip-bag{ display:flex; flex-wrap:wrap; gap:6px; width:100%; padding-bottom: 8px;}
+.chip-bag:empty{ min-height:0;padding-bottom: 0; }
+
+/* Softer default chips (optional) */
+.chip{ background:var(--surface-2); border-color:#dbece1; }
+
+/* ABSOLUTE suggestions dropdown */
+.suggestions{
+  position:absolute;
+  top: calc(100% + 6px);   /* sits just below the chip-input */
+  left:0; right:0;
+  z-index: 1000;
+  display:block;           /* hidden via [hidden] attr */
+  max-height: 240px;
+  overflow:auto;
+  overscroll-behavior: contain;
+  padding:0; margin:0;
+  list-style:none;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#fff;
+  box-shadow:var(--shadow);
+}
+
+/* Honor the hidden attribute */
+.suggestions[hidden]{ display:none; }
+
+.suggestions li{
+  padding:10px 12px; cursor:pointer;
+  line-height:1.4;
+}
+.suggestions li + li{ border-top:1px solid #f1f5f9; }
+.suggestions li:hover,
+.suggestions li.is-active{ background:var(--surface-2); }
+
+/* Nice focus outline on the input while dropdown is open */
+#subjectPicker:focus-within .chip-input{
+  box-shadow: var(--ring);
+  border-color: var(--primary);
+}
+
+/* Mobile polish */
+@media (max-width:640px){
+  .suggestions{ max-height: 200px; }
 }
