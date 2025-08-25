@@ -138,7 +138,7 @@
 
                 <div class="chip-input" aria-haspopup="listbox" aria-owns="subj-suggest" aria-expanded="false">
                   <input id="subjectsInput" class="input chip-editor" type="text"
-                        placeholder="Type to add… e.g., Math" autocomplete="off" />
+                        placeholder="Type to add… e.g., Math" autocomplete="off" enterkeyhint="done" />
                   <div class="chip-bag" id="subjChips"></div>
                 </div>
 
@@ -598,21 +598,22 @@
 <script>
 (() => {
   const SUGGESTIONS = [
-    "Math", "Science", "Biology", "Chemistry", "Physics",
-    "English", "Urdu", "Computer", "Islamiyat", "Pak Studies",
+    "Math","Science","Biology","Chemistry","Physics",
+    "English","Urdu","Computer","Islamiyat","Pak Studies",
     "General Knowledge"
   ];
 
-  const root   = document.getElementById('subjectPicker');
+  const root = document.getElementById('subjectPicker');
   if (!root) return;
 
   const editor = root.querySelector('#subjectsInput');
   const bag    = root.querySelector('#subjChips');
   const hidden = root.querySelector('#subjects');
   const list   = root.querySelector('#subj-suggest');
+  const form   = root.closest('form');
 
-  let picked = [];       // current chips
-  const maxChips = 10;   // sane upper bound
+  let picked = [];
+  const maxChips = 10;
 
   const norm = s => s.trim().replace(/\s+/g, ' ');
   const syncHidden = () => hidden.value = picked.join(', ');
@@ -626,7 +627,8 @@
       chip.textContent = label;
       chip.title = 'Remove';
       chip.addEventListener('click', () => {
-        picked.splice(i,1); renderChips(); syncHidden(); editor.focus();
+        picked.splice(i,1);
+        renderChips(); syncHidden(); editor.focus();
       });
       bag.appendChild(chip);
     });
@@ -654,7 +656,7 @@
       li.role = 'option';
       li.tabIndex = -1;
       li.textContent = s;
-      li.addEventListener('mousedown', (e) => { // mousedown to fire before blur
+      li.addEventListener('mousedown', (e) => { // before blur
         e.preventDefault(); addChip(s); editor.value=''; hideSuggestions();
       });
       list.appendChild(li);
@@ -666,27 +668,39 @@
       root.querySelector('.chip-input').setAttribute('aria-expanded','true');
     } else hideSuggestions();
   }
+
   function hideSuggestions(){
     list.hidden = true;
     root.querySelector('.chip-input').setAttribute('aria-expanded','false');
   }
 
-  // Add on Enter/Comma/Tab
+  // ----- NEW: one place that commits what's currently typed -----
+  function commitFromEditor() {
+    const active = list.querySelector('.is-active');
+    if (!list.hidden && active) {
+      addChip(active.textContent);
+      editor.value = '';
+      hideSuggestions();
+      return true;
+    }
+    const v = norm(editor.value);
+    if (v) {
+      addChip(v);
+      editor.value = '';
+      hideSuggestions();
+      return true;
+    }
+    return false;
+  }
+
+  // ----- Keyboard: handle Enter / Tab / comma (including Arabic comma) -----
   editor.addEventListener('keydown', (e) => {
-    if (['Enter', 'Tab'].includes(e.key) || (e.key === ',')) {
-      const active = list.querySelector('.is-active');
-      if (active && !list.hidden) {
-        addChip(active.textContent);
-        editor.value=''; hideSuggestions();
-      } else if (editor.value.trim()) {
-        addChip(editor.value); editor.value=''; hideSuggestions();
-      }
-      if (e.key !== 'Tab') e.preventDefault();
+    if (['Enter','Tab'].includes(e.key) || e.key === ',' ) {
+      if (commitFromEditor() && e.key !== 'Tab') e.preventDefault();
     }
     // Backspace on empty -> remove last chip
     if (e.key === 'Backspace' && !editor.value && picked.length) {
-      picked.pop(); renderChips(); syncHidden();
-      e.preventDefault();
+      picked.pop(); renderChips(); syncHidden(); e.preventDefault();
     }
     // Arrow nav in suggestions
     if (!list.hidden && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
@@ -700,16 +714,40 @@
     if (e.key === 'Escape') hideSuggestions();
   });
 
+  // ----- NEW: mobile safety nets -----
+  // Some mobile browsers don’t fire keydown reliably for Enter.
+  editor.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') { if (commitFromEditor()) e.preventDefault(); }
+  });
+
+  // Commit when the field loses focus (so nothing gets “lost” on mobile).
+  editor.addEventListener('blur', () => { setTimeout(() => { commitFromEditor(); }, 0); });
+
+  // Commit on change (iOS sometimes fires only change)
+  editor.addEventListener('change', () => { commitFromEditor(); });
+
+  // Block form submit when Enter is pressed inside this editor.
+  if (form) {
+    form.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && document.activeElement === editor) {
+        if (commitFromEditor()) e.preventDefault();
+      }
+    }, true);
+    // Also before submit, commit any pending token.
+    form.addEventListener('submit', () => { commitFromEditor(); });
+  }
+
+  // Keep suggestions fresh
   editor.addEventListener('input', () => showSuggestions(editor.value));
   editor.addEventListener('focus', () => showSuggestions(editor.value));
-  editor.addEventListener('blur',  () => setTimeout(hideSuggestions, 120));
 
-  // Seed from server value (if any)
+  // Seed from existing value
   if (hidden.value) {
     hidden.value.split(',').map(norm).filter(Boolean).forEach(addChip);
   }
 })();
 </script>
+
 
 </body>
 
