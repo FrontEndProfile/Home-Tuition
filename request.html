@@ -756,11 +756,24 @@
   editor.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') { if (commitFromEditor()) e.preventDefault(); }
   });
-//   editor.addEventListener('blur',  () => setTimeout(commitFromEditor, 0));
-  editor.addEventListener('change', () => commitFromEditor());
-  editor.addEventListener('input', () => showSuggestions(editor.value));
-  editor.addEventListener('focus', () => showSuggestions(editor.value));
+  // 👇 NEW: on blur just hide (no commit)
+  editor.addEventListener('blur', () => {
+    setTimeout(hideSuggestions, 0);
+  });
 
+  // change → still allowed to commit if a value typed and no key events fired
+  editor.addEventListener('change', () => commitFromEditor());
+  // input → filter suggestions live
+  editor.addEventListener('input', () => showSuggestions(editor.value));
+  // 👇 Tweak focus behavior (pick ONE)
+  editor.addEventListener('focus', () => {
+    if (editor.value.trim()) showSuggestions(editor.value); // only if has text
+    // OR: showSuggestions(editor.value); // if you want on blank focus too
+  });
+  // 👇 NEW: click/tap outside → hide
+  document.addEventListener('pointerdown', (e) => {
+    if (!root.contains(e.target)) hideSuggestions();
+  });
   if (form) {
     form.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && document.activeElement === editor) {
