@@ -12,15 +12,17 @@ a{color:inherit;text-decoration:none}
 input,button,select,textarea{font:inherit}
 
 /* Chrome, Safari, Edge */
-input::-webkit-calendar-picker-indicator,
-input::-webkit-list-button,
-input::-webkit-inner-spin-button {
+/* Remove unwanted controls for number, text, datalist inputs */
+/* Chrome / Safari */
+.field input[type="number"]::-webkit-inner-spin-button,
+.field input[list]::-webkit-calendar-picker-indicator,
+.field input[list]::-webkit-list-button {
   display: none !important;
   -webkit-appearance: none !important;
 }
 
-/* Firefox */
-input::-moz-list {
+/* Firefox (datalist arrow) */
+.field input[list]::-moz-list {
   display: none !important;
 }
 
@@ -663,59 +665,44 @@ fieldset.legendless{border:0;padding:0}
 /* =========================
    Chips input + dropdown
    ========================= */
-/* Anchor for absolute dropdown */
+/* chip container (you already have) */
 #subjectPicker{ position: relative; }
 
-/* Chip box: input on top, chips below (no jump) */
 .chip-input{
   display:flex; flex-direction:column; align-items:flex-start;
   gap:6px; min-height:44px; padding:6px;
   border:1px solid var(--border); border-radius:12px; background:#fff;
-  padding-bottom: 0;
+  padding-bottom:0;
 }
 .chip-editor{ width:100%; border:0; outline:none; padding:6px 8px; }
-.chip-bag{ display:flex; flex-wrap:wrap; gap:6px; width:100%; padding-bottom: 8px;}
-.chip-bag:empty{ min-height:0;padding-bottom: 0; }
+.chip-bag{ display:flex; flex-wrap:wrap; gap:6px; width:100%; padding-bottom:8px; }
+.chip-bag:empty{ padding-bottom:0; }
 
-/* Softer default chips (optional) */
-.chip{ background:var(--surface-2); border-color:#dbece1; }
+/* chip with close icon */
+.chip{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 10px; border-radius:999px;
+  background:var(--surface-2); border:1px solid #dbece1;
+}
+.chip-x{
+  font-weight:700; opacity:.6; line-height:1; margin-left:2px;
+}
+.chip:hover .chip-x{ opacity:1; }
+.chip:focus-visible{ box-shadow:var(--ring); }
 
-/* ABSOLUTE suggestions dropdown */
+/* absolute suggestions */
 .suggestions{
-  position:absolute;
-  top: calc(100% + 6px);   /* sits just below the chip-input */
-  left:0; right:0;
-  z-index: 1000;
-  display:block;           /* hidden via [hidden] attr */
-  max-height: 240px;
-  overflow:auto;
-  overscroll-behavior: contain;
-  padding:0; margin:0;
-  list-style:none;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:#fff;
-  box-shadow:var(--shadow);
+  position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:1000;
+  display:block; max-height:240px; overflow:auto; overscroll-behavior:contain;
+  padding:0; margin:0; list-style:none; border:1px solid var(--border);
+  border-radius:12px; background:#fff; box-shadow:var(--shadow);
 }
-
-/* Honor the hidden attribute */
 .suggestions[hidden]{ display:none; }
-
-.suggestions li{
-  padding:10px 12px; cursor:pointer;
-  line-height:1.4;
-}
+.suggestions li{ padding:10px 12px; cursor:pointer; line-height:1.4; }
 .suggestions li + li{ border-top:1px solid #f1f5f9; }
-.suggestions li:hover,
-.suggestions li.is-active{ background:var(--surface-2); }
+.suggestions li:hover, .suggestions li.is-active{ background:var(--surface-2); }
 
-/* Nice focus outline on the input while dropdown is open */
-#subjectPicker:focus-within .chip-input{
-  box-shadow: var(--ring);
-  border-color: var(--primary);
-}
+#subjectPicker:focus-within .chip-input{ box-shadow:var(--ring); border-color:var(--primary); }
+@media (max-width:640px){ .suggestions{ max-height:200px; } }
 
-/* Mobile polish */
-@media (max-width:640px){
-  .suggestions{ max-height: 200px; }
-}
+
