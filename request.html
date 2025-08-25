@@ -99,10 +99,9 @@
                 <label for="name">Your Name *</label>
                 <input id="name" name="name" class="input" placeholder="Full name" required autocomplete="name" />
               </div>
-              <div class="col-6 field">
+              <div class="col-6 field" id="mobileField">
                 <label for="mobile">Mobile *</label>
-                <input id="mobile" name="mobile" class="input" placeholder="e.g., +92 3XX XXXXXXX" required
-                  autocomplete="tel" pattern="^[+0-9\\s-]{8,}$" />
+                <input id="mobile" name="mobile" class="input" placeholder="e.g., +92 300 1234567" required autocomplete="tel" inputmode="tel" />
               </div>
             </div>
             <div class="row">
@@ -134,7 +133,7 @@
                 <input id="subjects" name="subjects" class="input" placeholder="e.g., Math, Physics" required />
               </div> -->
               <div class="col-6 field" id="subjectPicker">
-                <label>Subjects *</label>
+                <label>Subjects</label>
                 <div class="chip-input" aria-haspopup="listbox" aria-owns="subj-suggest" aria-expanded="false">
                   <input id="subjectsInput" class="input chip-editor" type="text" placeholder="Type to add… e.g., Math" autocomplete="off" enterkeyhint="done" />
                   <div class="chip-bag" id="subjChips"></div>
@@ -228,8 +227,9 @@
                 <label for="times">All Available Days & Timings *</label>
                 <textarea id="times" name="times" placeholder="e.g., Mon 5–7pm; Wed 3–5pm; Sat mornings"
                   required></textarea>
-                <div class="hint">State as many options as possible for best matches.</div>
+                <div class="hint">Enter multiple timings separated by a <strong>semicolon</strong>.</div>
               </div>
+              
             </div>
 
             <!-- Preferred Format removed (we only offer in-home tuition) -->
@@ -377,15 +377,27 @@
     ];
 
     function markField(el, valid, msg) {
-      const wrap = el.closest('.field') || el.parentElement;
+      const isSubjects = el && el.id === 'subjects';
+
+      // Always resolve the correct wrapper and visual target
+      const wrap   = isSubjects
+        ? document.getElementById('subjectPicker') || el.closest('.field')
+        : el.closest('.field');
+
+      const visual = isSubjects
+        ? document.getElementById('subjectsInput')
+        : el;
+
+      if (!wrap) return; // safety: don't attempt if we can't find the container
+
       if (valid) {
-        wrap?.classList.remove('invalid');
-        const err = wrap?.querySelector('.err'); if (err) err.remove();
-        el.removeAttribute('aria-invalid');
+        wrap.classList.remove('invalid');
+        wrap.querySelector('.err')?.remove();
+        visual?.removeAttribute('aria-invalid');
       } else {
-        wrap?.classList.add('invalid');
-        el.setAttribute('aria-invalid', 'true');
-        if (wrap && !wrap.querySelector('.err')) {
+        wrap.classList.add('invalid');
+        visual?.setAttribute('aria-invalid', 'true');
+        if (!wrap.querySelector('.err')) {
           const small = document.createElement('small');
           small.className = 'err';
           small.textContent = msg || 'This field is required';
@@ -394,20 +406,31 @@
       }
     }
 
+
+
     function validateStep(stepIndex) {
       const missing = [];
       const els = [...fieldsByStep[stepIndex]];
-      // dynamic rules
+
+      // dynamic rules for step 2
       if (stepIndex === 1) {
         const pref = document.querySelector('input[name="budgetType"]:checked')?.value === 'preferred';
         if (pref) els.push(F('rate'));
       }
+
       els.forEach(el => {
         if (!el) return;
-        let ok = true;
-        if (el.type === 'checkbox') ok = el.checked;
-        else ok = !!String(el.value || '').trim();
-        markField(el, ok);
+
+        let ok;
+        if (el.id === 'subjects') {                     // chips hidden field
+          ok = !!String(el.value || '').trim();        // at least one chip
+        } else if (typeof el.checkValidity === 'function') {
+          ok = el.checkValidity();                      // <-- native pattern/required/email/etc.
+        } else {
+          ok = !!String(el.value || '').trim();
+        }
+
+        markField(el, ok);                              // your existing UI hook
         if (!ok) missing.push(el);
       });
       return missing;
@@ -624,12 +647,6 @@
 
 <script>
 (() => {
-  const SUGGESTIONS = [
-    "Math","Science","Biology","Chemistry","Physics",
-    "English","Urdu","Computer","Islamiyat","Pak Studies",
-    "General Knowledge"
-  ];
-
   const root   = document.getElementById('subjectPicker');
   if (!root) return;
 
@@ -643,9 +660,26 @@
   const maxChips = 10;
 
   const norm = s => s.trim().replace(/\s+/g, ' ');
-  const syncHidden = () => hidden.value = picked.join(', ');
 
-  // ------- RENDER (single, clean) -------
+// 1) Keep hidden in sync ONLY. No error styling here.
+function syncHidden() {
+  hidden.value = picked.join(', ');
+  hidden.required = true;      // let your validator decide when it's missing
+  hidden.setCustomValidity(''); // don't inject messages here
+}
+
+// 2) If a previous error exists and user adds a chip, clear it.
+function clearErrorIfFixed() {
+  const wrap = root.closest('.field');
+  if (picked.length > 0 && wrap?.classList.contains('invalid')) {
+    wrap.classList.remove('invalid');
+    wrap.querySelector('.err')?.remove();
+    editor.removeAttribute('aria-invalid');
+  }
+}
+
+
+  // -------- render chips (with removable ×) --------
   function renderChips() {
     bag.innerHTML = picked.map((label, i) => `
       <button type="button" class="chip chip--soft chip-rem" data-i="${i}" title="Remove">
@@ -653,10 +687,10 @@
         <span class="chip-x" aria-hidden="true">&times;</span>
       </button>
     `).join('');
-    syncHidden();
+    syncHidden();        // just value syncing
+  clearErrorIfFixed();
   }
 
-  // one listener for all chips (click or keyboard)
   bag.addEventListener('click', (e) => {
     const btn = e.target.closest('.chip-rem');
     if (!btn) return;
@@ -664,127 +698,100 @@
     if (!Number.isNaN(i)) {
       picked.splice(i, 1);
       renderChips();
-      // refresh suggestions so removed items can appear again
       showSuggestions(editor.value);
       editor.focus();
     }
   });
-  bag.addEventListener('keydown', (e) => {
-    if (!e.target.classList.contains('chip-rem')) return;
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      e.target.click();
-    }
-  });
 
-  function addChip(value) {
+  function addChip(value){
     value = norm(value);
-    if (!value) return;
-    if (picked.includes(value)) return;
-    if (picked.length >= maxChips) return;
+    if (!value || picked.includes(value) || picked.length >= maxChips) return;
     picked.push(value);
     renderChips();
   }
 
-  function showSuggestions(query='') {
-    const q = norm(query).toLowerCase();
+  // ------ suggestions (unchanged, trimmed) ------
+  const SUGGESTIONS = ["Math","Science","Biology","Chemistry","Physics","English","Urdu","Computer","Islamiyat","Pak Studies","General Knowledge"];
+  function showSuggestions(q=''){
     const items = SUGGESTIONS
       .filter(s => !picked.includes(s))
-      .filter(s => !q || s.toLowerCase().includes(q))
-      .slice(0, 8);
-
+      .filter(s => !q.trim() || s.toLowerCase().includes(q.toLowerCase()))
+      .slice(0,8);
     list.innerHTML = '';
     items.forEach((s, idx) => {
       const li = document.createElement('li');
-      li.role = 'option';
-      li.tabIndex = -1;
-      li.textContent = s;
-      li.addEventListener('mousedown', (e) => { // before blur
-        e.preventDefault(); addChip(s); editor.value=''; hideSuggestions();
-      });
+      li.role = 'option'; li.tabIndex = -1; li.textContent = s;
+      li.addEventListener('mousedown', (e)=>{ e.preventDefault(); addChip(s); editor.value=''; hideSuggestions(); });
+      if (idx===0) li.classList.add('is-active');
       list.appendChild(li);
-      if (idx === 0) li.classList.add('is-active');
     });
-
-    if (items.length) {
-      list.hidden = false;
-      root.querySelector('.chip-input').setAttribute('aria-expanded','true');
-    } else hideSuggestions();
+    list.hidden = items.length === 0;
+    root.querySelector('.chip-input').setAttribute('aria-expanded', String(!list.hidden));
   }
   function hideSuggestions(){
     list.hidden = true;
     root.querySelector('.chip-input').setAttribute('aria-expanded','false');
   }
 
-  // one place that commits what's currently typed
-  function commitFromEditor() {
+  function commitFromEditor(){
     const active = list.querySelector('.is-active');
-    if (!list.hidden && active) {
-      addChip(active.textContent);
-      editor.value = '';
-      hideSuggestions();
-      return true;
+    if (!list.hidden && active){
+      addChip(active.textContent); editor.value=''; hideSuggestions(); return true;
     }
-    const v = norm(editor.value);
-    if (v) {
-      addChip(v);
-      editor.value = '';
-      hideSuggestions();
-      return true;
-    }
+    const v = norm(editor.value); if (v){ addChip(v); editor.value=''; hideSuggestions(); return true; }
     return false;
   }
 
-  // Keyboard + mobile safety nets
-  editor.addEventListener('keydown', (e) => {
-    if (['Enter','Tab'].includes(e.key) || e.key === ',') {
-      if (commitFromEditor() && e.key !== 'Tab') e.preventDefault();
+  // keyboard & mobile guards (same behavior)
+  editor.addEventListener('keydown', (e)=>{
+    if (['Enter','Tab'].includes(e.key) || e.key===','){ if (commitFromEditor() && e.key!=='Tab') e.preventDefault(); }
+    if (e.key==='Backspace' && !editor.value && picked.length){ picked.pop(); renderChips(); e.preventDefault(); }
+    if (!list.hidden && (e.key==='ArrowDown'||e.key==='ArrowUp')){
+      const items=[...list.children]; let i=items.findIndex(li=>li.classList.contains('is-active'));
+      i = e.key==='ArrowDown' ? (i+1)%items.length : (i-1+items.length)%items.length;
+      items.forEach(li=>li.classList.remove('is-active')); items[i].classList.add('is-active'); e.preventDefault();
     }
-    if (e.key === 'Backspace' && !editor.value && picked.length) {
-      picked.pop(); renderChips(); e.preventDefault();
-    }
-    if (!list.hidden && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
-      const items = [...list.children];
-      let i = items.findIndex(li => li.classList.contains('is-active'));
-      i = (e.key === 'ArrowDown') ? (i+1) % items.length : (i-1+items.length)%items.length;
-      items.forEach(li => li.classList.remove('is-active'));
-      items[i].classList.add('is-active');
-      e.preventDefault();
-    }
-    if (e.key === 'Escape') hideSuggestions();
+    if (e.key==='Escape') hideSuggestions();
   });
-  editor.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') { if (commitFromEditor()) e.preventDefault(); }
-  });
-  // 👇 NEW: on blur just hide (no commit)
-  editor.addEventListener('blur', () => {
-    setTimeout(hideSuggestions, 0);
-  });
+  editor.addEventListener('keyup', e=>{ if (e.key==='Enter'){ if (commitFromEditor()) e.preventDefault(); }});
+  editor.addEventListener('input', ()=> showSuggestions(editor.value));
+  editor.addEventListener('focus', ()=> { if (editor.value.trim()) showSuggestions(editor.value); });
+  editor.addEventListener('blur', ()=> setTimeout(hideSuggestions,0));
+  document.addEventListener('pointerdown', (e)=>{ if (!root.contains(e.target)) hideSuggestions(); });
 
-  // change → still allowed to commit if a value typed and no key events fired
-  editor.addEventListener('change', () => commitFromEditor());
-  // input → filter suggestions live
-  editor.addEventListener('input', () => showSuggestions(editor.value));
-  // 👇 Tweak focus behavior (pick ONE)
-  editor.addEventListener('focus', () => {
-    if (editor.value.trim()) showSuggestions(editor.value); // only if has text
-    // OR: showSuggestions(editor.value); // if you want on blank focus too
-  });
-  // 👇 NEW: click/tap outside → hide
-  document.addEventListener('pointerdown', (e) => {
-    if (!root.contains(e.target)) hideSuggestions();
-  });
-  if (form) {
-    form.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && document.activeElement === editor) {
-        if (commitFromEditor()) e.preventDefault();
-      }
-    }, true);
-    form.addEventListener('submit', () => { commitFromEditor(); });
+  // also let native "invalid" event style the field
+  hidden.addEventListener('invalid', ()=> syncHidden());
+
+  // initial
+  renderChips();
+})();
+</script>
+
+
+<script>
+(() => {
+  const mobile = document.getElementById("mobile");
+  const wrap   = document.getElementById("mobileField");
+
+  // Pakistan mobile format: +92 3XX XXXXXXX OR 03XX XXXXXXX
+  const mobileRegex = /^((\+92)|0)3[0-9]{2}[-\s]?[0-9]{7}$/;
+
+  function validateMobile() {
+    const val = mobile.value.trim();
+    const ok  = mobileRegex.test(val);
+
+    if (val && !ok) {
+      wrap.classList.add("invalid");
+      mobile.setAttribute("aria-invalid", "true");
+    } else {
+      wrap.classList.remove("invalid");
+      mobile.removeAttribute("aria-invalid");
+    }
   }
 
-  // initial render (empty)
-  renderChips();
+  // Check while typing and on blur
+  mobile.addEventListener("input", validateMobile);
+  mobile.addEventListener("blur", validateMobile);
 })();
 </script>
 

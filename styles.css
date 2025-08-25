@@ -225,7 +225,7 @@ input,button,select,textarea{font:inherit}
 .field label{font-weight:600}
 .hint{color:var(--muted);font-size:.9rem;margin-top:4px}
 .field .err { display:block; font-size:12px; color:#B91C1C; margin-top:6px; }
-.field.invalid .input, .field.invalid textarea, .field.invalid select{
+.field.invalid .input, .field.invalid textarea, .field.invalid select, .field.invalid .chip-input {
     border-color:#EF4444 !important; box-shadow:0 0 0 4px rgb(239 68 68 / 10%) !important;
 }
 
@@ -416,12 +416,16 @@ fieldset.legendless{border:0;padding:0}
 
 /* About avatar stays same size, just a tiny visual bump */
 .avatar{
-  width:96px;height:96px;border-radius:50%;
+  width:160px;height:160px;border-radius:50%;
   display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--primary),#06b6d4);
+  /* background:linear-gradient(135deg,var(--primary),#06b6d4); */
+  background-image: url(./Zahra-Mubeen-Home-Tuition.jpg);
   color:#fff;font-weight:800;font-size:28px;letter-spacing:.5px;
   box-shadow:var(--shadow);
   margin-bottom: 18px;
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
 }
 
 /* CTA alignment */
@@ -706,3 +710,7 @@ fieldset.legendless{border:0;padding:0}
 @media (max-width:640px){ .suggestions{ max-height:200px; } }
 
 
+/* Make chip box look like other fields when invalid */
+#subjectPicker #subjectsInput {
+  box-shadow: none !important;
+}
