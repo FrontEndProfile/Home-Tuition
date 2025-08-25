@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://zahra-tuition.vercel.app/sitemap.xml
